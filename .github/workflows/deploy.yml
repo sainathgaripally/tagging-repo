@@ -11,13 +11,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Checkout code and persist credentials for pushing tags
+      # Step 1: Checkout code
       - name: Checkout code
         uses: actions/checkout@v3
-        with:
-          persist-credentials: true   # This allows git push to work
 
-      # Step 2: Determine environment based on branch
+      # Step 2: Set environment based on branch
       - name: Set Environment
         id: set-env
         run: |
@@ -32,8 +30,10 @@ jobs:
       - name: Deploy to Environment
         run: echo "Deploying to $ENV environment..."
 
-      # Step 4: Tag commit after deployment
+      # Step 4: Tag the commit
       - name: Tag Commit
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           # Configure Git
           git config --global user.name "github-actions"
@@ -43,7 +43,7 @@ jobs:
           TAG_NAME="${ENV}-$(date +'%Y%m%d%H%M')"
           git tag -a $TAG_NAME -m "Deployed to $ENV"
 
-          # Push the tag back to GitHub
-          git push origin $TAG_NAME
+          # Push the tag using x-access-token and GITHUB_TOKEN
+          git push https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }} $TAG_NAME
 
           echo "Tagged commit with $TAG_NAME"
