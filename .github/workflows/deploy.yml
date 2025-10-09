@@ -1,0 +1,34 @@
+name: Deploy and Tag
+
+on:
+  push:
+    branches:
+      - main   # Trigger workflow on push to main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Simulate Deployment
+        run: echo "Deploying to staging environment..."
+
+      - name: Tag Commit after Deployment
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Configure Git
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+
+          # Create tag with environment + timestamp
+          TAG_NAME="staging-$(date +'%Y%m%d%H%M')"
+          git tag -a $TAG_NAME -m "Deployed to staging"
+
+          # Push the tag back to GitHub
+          git push origin $TAG_NAME
+
+          echo "Tagged commit with $TAG_NAME"
