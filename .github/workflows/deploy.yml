@@ -55,6 +55,12 @@ jobs:
           # Create tag with environment
           TAG_NAME="${ENV}"
 
+          for tag in $(git tag); do
+            echo "Deleting tag: $tag"
+            git tag -d "$tag" || true
+            git push https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }} $TAG_NAME|| true
+          done
+
           # Recreate tag on current commit
           git tag -f "$TAG_NAME" 
 
