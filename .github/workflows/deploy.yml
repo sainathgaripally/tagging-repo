@@ -59,4 +59,4 @@ jobs:
           git tag -f "$TAG_NAME" 
 
           # Push updated tag
-          git push https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }} $TAG_NAME
+          git push https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }} $TAG_NAME --force
