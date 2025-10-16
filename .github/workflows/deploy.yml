@@ -21,7 +21,7 @@ jobs:
         id: set-env
         run: |
           if [ "${GITHUB_REF##*/}" == "main" ]; then
-            echo "ENV=qa" >> $GITHUB_ENV
+            echo "ENV=fhgvv" >> $GITHUB_ENV
           else
             echo "ENV=staging" >> $GITHUB_ENV
           fi
@@ -58,7 +58,7 @@ jobs:
           for tag in $(git tag); do
             echo "Deleting tag: $tag"
             git tag -d "$tag" || true
-            git push https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }} $TAG_NAME|| true
+            git push https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }} ":refs/tags/$tag" || true
           done
 
           # Recreate tag on current commit
