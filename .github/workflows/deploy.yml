@@ -36,9 +36,21 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          cd "$GITHUB_WORKSPACE"
+          echo "Current directory: $(pwd)"
+          echo "Listing repo contents:"
+          ls -la
+
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+
+          git fetch --all --tags
+
           # Configure Git
           git config --global user.name "github-actions"
           git config --global user.email "github-actions@github.com"
+
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
 
           # Create tag with environment + timestamp
           TAG_NAME="${ENV}-$(date +'%Y%m%d%H%M')"
