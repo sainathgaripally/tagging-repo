@@ -21,7 +21,7 @@ jobs:
         id: set-env
         run: |
           if [ "${GITHUB_REF##*/}" == "main" ]; then
-            echo "ENV=qa" >> $GITHUB_ENV
+            echo "ENV=uat" >> $GITHUB_ENV
           else
             echo "ENV=staging" >> $GITHUB_ENV
           fi
