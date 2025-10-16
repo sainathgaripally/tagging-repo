@@ -53,7 +53,7 @@ jobs:
           git config user.email "github-actions@github.com"
 
           # Create tag with environment + timestamp
-          #TAG_NAME="${ENV}"
+          TAG_NAME="${ENV}"
           #git tag -f $TAG_NAME -m "Deployed to $ENV"
 
           # Push the tag using x-access-token and GITHUB_TOKEN
