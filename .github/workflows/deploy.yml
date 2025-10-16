@@ -21,7 +21,7 @@ jobs:
         id: set-env
         run: |
           if [ "${GITHUB_REF##*/}" == "main" ]; then
-            echo "ENV=users" >> $GITHUB_ENV
+            echo "ENV=testingone" >> $GITHUB_ENV
           else
             echo "ENV=staging" >> $GITHUB_ENV
           fi
@@ -53,10 +53,23 @@ jobs:
           git config user.email "github-actions@github.com"
 
           # Create tag with environment + timestamp
-          TAG_NAME="${ENV}"
-          git tag -f $TAG_NAME -m "Deployed to $ENV"
+          #TAG_NAME="${ENV}"
+          #git tag -f $TAG_NAME -m "Deployed to $ENV"
 
           # Push the tag using x-access-token and GITHUB_TOKEN
-          git push https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }} $TAG_NAME --force
+          #git push https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }} $TAG_NAME --force
 
-          echo "Tagged commit with $TAG_NAME"
+          #echo "Tagged commit with $TAG_NAME"
+
+
+
+
+          git tag -d "$TAG_NAME" || true
+          git push https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }} ":refs/tags/$TAG_NAME" || true
+
+          # Recreate tag on current commit
+          git tag -a "$TAG_NAME" -m "Latest deployment for $ENV"
+
+          # Push updated tag
+          git push https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }} "refs/tags/$TAG_NAME"
+
