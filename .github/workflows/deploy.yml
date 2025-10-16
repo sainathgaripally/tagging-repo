@@ -21,7 +21,7 @@ jobs:
         id: set-env
         run: |
           if [ "${GITHUB_REF##*/}" == "main" ]; then
-            echo "ENV=dev" >> $GITHUB_ENV
+            echo "ENV=stage" >> $GITHUB_ENV
           else
             echo "ENV=staging" >> $GITHUB_ENV
           fi
@@ -55,12 +55,8 @@ jobs:
           # Create tag with environment
           TAG_NAME="${ENV}"
 
-          git tag -d "$TAG_NAME" || true
-          git push https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }} ":refs/tags/$TAG_NAME" || true
-
           # Recreate tag on current commit
-          git tag -a "$TAG_NAME" -m "Latest deployment for $ENV"
+          git tag -f "$TAG_NAME" 
 
           # Push updated tag
-          git push https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }} "refs/tags/$TAG_NAME"
-
+          git push https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }} $TAG_NAME
