@@ -54,9 +54,9 @@ jobs:
 
           # Create tag with environment + timestamp
           TAG_NAME="${ENV}-$(date +'%Y%m%d%H%M')"
-          git tag -a $TAG_NAME -m "Deployed to $ENV"
+          git tag -f $TAG_NAME -m "Deployed to $ENV"
 
           # Push the tag using x-access-token and GITHUB_TOKEN
-          git push https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }} $TAG_NAME
+          git push https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }} $TAG_NAME --force
 
           echo "Tagged commit with $TAG_NAME"
