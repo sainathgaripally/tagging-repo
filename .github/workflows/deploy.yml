@@ -21,7 +21,7 @@ jobs:
         id: set-env
         run: |
           if [ "${GITHUB_REF##*/}" == "main" ]; then
-            echo "ENV=testingtwo" >> $GITHUB_ENV
+            echo "ENV=dev" >> $GITHUB_ENV
           else
             echo "ENV=staging" >> $GITHUB_ENV
           fi
@@ -52,17 +52,8 @@ jobs:
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
 
-          # Create tag with environment + timestamp
+          # Create tag with environment
           TAG_NAME="${ENV}"
-          #git tag -f $TAG_NAME -m "Deployed to $ENV"
-
-          # Push the tag using x-access-token and GITHUB_TOKEN
-          #git push https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }} $TAG_NAME --force
-
-          #echo "Tagged commit with $TAG_NAME"
-
-
-
 
           git tag -d "$TAG_NAME" || true
           git push https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }} ":refs/tags/$TAG_NAME" || true
